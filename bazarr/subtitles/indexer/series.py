@@ -161,6 +161,10 @@ def list_missing_subtitles(no=None, epno=None, send_event=True):
                         if language_from_alpha2(language['language']) in ast.literal_eval(
                                 episode_subtitles['audio_language']):
                             continue
+                    elif language['audio_include'] == "True":
+                        if not (language_from_alpha2(language['language']) in ast.literal_eval(
+                                episode_subtitles['audio_language'])):
+                            continue
                     desired_subtitles_list.append([language['language'], language['forced'], language['hi']])
 
             # get existing subtitles
@@ -195,12 +199,15 @@ def list_missing_subtitles(no=None, epno=None, send_event=True):
                     if cutoff_temp['audio_exclude'] == 'True' and language_from_alpha2(cutoff_temp['language']) in \
                             ast.literal_eval(episode_subtitles['audio_language']):
                         cutoff_met = True
-                    elif cutoff_language in actual_subtitles_list:
-                        cutoff_met = True
-                    elif cutoff_language and [cutoff_language[0], 'True', 'False'] in actual_subtitles_list:
-                        cutoff_met = True
-                    elif cutoff_language and [cutoff_language[0], 'False', 'True'] in actual_subtitles_list:
-                        cutoff_met = True
+                    elif cutoff_temp['audio_include'] == 'False' or (cutoff_temp['audio_include'] == 'True' \
+                            and language_from_alpha2(cutoff_temp['language']) in \
+                            ast.literal_eval(episode_subtitles['audio_language']):
+                        elif cutoff_language in actual_subtitles_list:
+                            cutoff_met = True
+                        elif cutoff_language and [cutoff_language[0], 'True', 'False'] in actual_subtitles_list:
+                            cutoff_met = True
+                        elif cutoff_language and [cutoff_language[0], 'False', 'True'] in actual_subtitles_list:
+                            cutoff_met = True
 
             if cutoff_met:
                 missing_subtitles_text = str([])

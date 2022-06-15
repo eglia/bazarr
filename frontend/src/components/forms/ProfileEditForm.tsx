@@ -26,6 +26,7 @@ const defaultCutoffOptions: SelectorOption<Language.ProfileItem>[] = [
     value: {
       id: anyCutoff,
       audio_exclude: "False",
+      audio_include: "False",
       forced: "False",
       hi: "False",
       language: "any",
@@ -113,6 +114,7 @@ const ProfileEditForm: FunctionComponent<Props> = ({
         id,
         language,
         audio_exclude: "False",
+        audio_include: "False",
         hi: "False",
         forced: "False",
       };
@@ -203,6 +205,23 @@ const ProfileEditForm: FunctionComponent<Props> = ({
                 action.mutate(index, {
                   ...item,
                   audio_exclude: checked ? "True" : "False",
+                });
+              }}
+            ></Checkbox>
+          );
+        },
+      },
+      {
+        Header: "Include Audio",
+        accessor: "audio_include",
+        Cell: ({ row: { original: item, index }, value }) => {
+          return (
+            <Checkbox
+              checked={value === "True"}
+              onChange={({ currentTarget: { checked } }) => {
+                action.mutate(index, {
+                  ...item,
+                  audio_include: checked ? "True" : "False",
                 });
               }}
             ></Checkbox>
